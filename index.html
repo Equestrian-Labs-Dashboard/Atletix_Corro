@@ -26,10 +26,10 @@ const LS_MODE='atletix_github_mode_v1';
 const LS_PERIOD='atletix_github_period_v1';
 const LS_REVIEW='atletix_review_choices_v1';
 let report=null, mode=localStorage.getItem(LS_MODE)||'half', rows=[];
-function money(n){n=Number(n||0);return '$'+n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
-function num(n){return Number(n||0).toLocaleString();}
+function money(n){n=Number(n||0);return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function num(n){return Number(n||0).toLocaleString('en-US');}
 function esc(s){return String(s==null?'':s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function dateFmt(s){if(!s)return'';const d=new Date(s);return d.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});}
+function dateFmt(s){if(!s)return'';const d=new Date(s);return d.toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'});}
 function keyOf(r){return r.manual_id||String(r.order_id||'')+'_'+String(r.product||'')+'_'+String(r.quantity||'');}
 function yearOf(r){const d=new Date(r.order_date);return d.getFullYear();}
 function monthOf(r){const d=new Date(r.order_date);return d.getMonth()+1;}
@@ -42,7 +42,7 @@ async function loadData(cacheBust=false){try{document.getElementById('main').cla
 function reloadData(){loadData(true);}
 function setMode(m){mode=m;localStorage.setItem(LS_MODE,m);buildPeriodSelect();loadView();}
 function buildPeriodSelect(){['Month','Quarter','Half'].forEach(x=>document.getElementById('tab'+x).classList.toggle('active',mode===x.toLowerCase().replace('half','half')));document.getElementById('tabHalf').classList.toggle('active',mode==='half');const sel=document.getElementById('periodSelect');const saved=localStorage.getItem(LS_PERIOD)||'';let opts=[];const seen=new Set();const now=new Date();
- rows.forEach(r=>{if(!r.order_date)return;const y=yearOf(r),m=monthOf(r);if(!y||!m)return;if(mode==='month'){const k=`M:${y}:${m}`;if(!seen.has(k)){seen.add(k);opts.push({k,label:new Date(y,m-1,1).toLocaleString(undefined,{month:'long',year:'numeric'}),sort:y*100+m});}} if(mode==='quarter'){const q=qOf(m),k=`Q:${y}:${q}`;if(!seen.has(k)){seen.add(k);opts.push({k,label:`Q${q} ${y}`,sort:y*10+q});}} if(mode==='half'){const h=halfOf(m),k=`H:${y}:${h}`;if(!seen.has(k)){seen.add(k);opts.push({k,label:`${h} ${y} (${h==='H1'?'Jan - Jun':'Jul - Dec'})`,sort:y*10+(h==='H1'?1:2)});}}});
+ rows.forEach(r=>{if(!r.order_date)return;const y=yearOf(r),m=monthOf(r);if(!y||!m)return;if(mode==='month'){const k=`M:${y}:${m}`;if(!seen.has(k)){seen.add(k);opts.push({k,label:new Date(y,m-1,1).toLocaleString('en-US',{month:'long',year:'numeric'}),sort:y*100+m});}} if(mode==='quarter'){const q=qOf(m),k=`Q:${y}:${q}`;if(!seen.has(k)){seen.add(k);opts.push({k,label:`Q${q} ${y}`,sort:y*10+q});}} if(mode==='half'){const h=halfOf(m),k=`H:${y}:${h}`;if(!seen.has(k)){seen.add(k);opts.push({k,label:`${h} ${y} (${h==='H1'?'Jan - Jun':'Jul - Dec'})`,sort:y*10+(h==='H1'?1:2)});}}});
  // Always keep H1/H2 for current year visible in review.
  if(mode==='half'){const cy=now.getFullYear();['H1','H2'].forEach((h,i)=>{const k=`H:${cy}:${h}`;if(!seen.has(k)){seen.add(k);opts.push({k,label:`${h} ${cy} (${h==='H1'?'Jan - Jun':'Jul - Dec'})`,sort:cy*10+i+1});}})}
  opts.sort((a,b)=>b.sort-a.sort);sel.innerHTML=opts.map(o=>`<option value="${o.k}">${o.label}</option>`).join(''); if(opts.find(o=>o.k===saved)) sel.value=saved; else if(mode==='half'){const h1=`H:${now.getFullYear()}:H1`;sel.value=opts.find(o=>o.k===h1)?.k||opts[0]?.k||'';} else sel.value=opts[0]?.k||'';}
