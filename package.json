@@ -1,0 +1,11 @@
+{
+  "name": "atletix-horse-sales-report-github",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:data": "node scripts/build-data.mjs",
+    "serve": "npx serve public"
+  },
+  "engines": { "node": ">=20" }
+}
