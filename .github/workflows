@@ -1,33 +1,27 @@
-name: Build data and deploy GitHub Pages
+name: Build Shopify data
 
 on:
   workflow_dispatch:
   schedule:
-    # Automatic Shopify refresh every 2 days at 08:00 UTC.
+    # Refresh Shopify data every 2 days at 08:00 UTC.
     - cron: '0 8 */2 * *'
-  push:
-    branches: [ main ]
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
+  contents: write
 
 jobs:
-  build:
+  build-data:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Setup Node
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Build Shopify data
+
+      - name: Generate report data from Shopify
         env:
           SHOPIFY_STORE: ${{ secrets.SHOPIFY_STORE }}
           SHOPIFY_TOKEN: ${{ secrets.SHOPIFY_TOKEN }}
@@ -37,19 +31,15 @@ jobs:
           ATLETIX_STOCK_RECEIVED_DATE: ${{ vars.ATLETIX_STOCK_RECEIVED_DATE || '2025-12-26' }}
           ATLETIX_SKU: ${{ vars.ATLETIX_SKU || 'ATLETIX60' }}
         run: npm run build:data
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: public
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+
+      - name: Commit refreshed report JSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/report.json public/data/report.json
+          if git diff --cached --quiet; then
+            echo "No data changes to commit."
+          else
+            git commit -m "Refresh Atletix Shopify data"
+            git push
+          fi
