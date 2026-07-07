@@ -202,6 +202,9 @@ const out = {
   manual_defaults: MANUAL_DEFAULTS,
   rows
 };
+await fs.mkdir(path.resolve('data'), { recursive: true });
 await fs.mkdir(path.resolve('public/data'), { recursive: true });
-await fs.writeFile(path.resolve('public/data/report.json'), JSON.stringify(out, null, 2));
-console.log(`Generated public/data/report.json with ${rows.length} Atletix rows from ${orders.length} Shopify orders.`);
+const json = JSON.stringify(out, null, 2);
+await fs.writeFile(path.resolve('data/report.json'), json);
+await fs.writeFile(path.resolve('public/data/report.json'), json);
+console.log(`Generated data/report.json and public/data/report.json with ${rows.length} Atletix rows from ${orders.length} Shopify orders.`);

@@ -1,35 +1,30 @@
-# Atletix Horse Sales Report — GitHub Native
+# Atletix Horse Sales Report — GitHub Native v3
 
-Esta versión **ya no usa Google Apps Script**. Todo funciona con:
+Esta versión no usa Google Apps Script. Está preparada para **GitHub Pages desde branch/root**.
 
-- **GitHub Pages** para mostrar el reporte.
-- **GitHub Actions** para leer Shopify y generar `public/data/report.json`.
-- **GitHub Secrets / Variables** para guardar credenciales y configuración.
+## Por qué antes veías el README
 
-## Importante sobre el botón Refresh
+GitHub Pages estaba publicando desde `main / (root)`, pero el repo no tenía `index.html` en la raíz. Cuando no hay `index.html`, GitHub Pages puede mostrar el README. Esta versión trae `index.html` en la raíz.
 
-En una app 100% GitHub Pages no se puede llamar Shopify directamente desde el navegador sin exponer el token. Por seguridad, el botón **Refresh** del reporte recarga el último JSON generado por GitHub Actions.
+## Configuración de GitHub Pages
 
-La actualización real desde Shopify ocurre:
+Settings → Pages:
 
-1. Automáticamente cada 2 días por GitHub Actions.
-2. Manualmente desde GitHub → Actions → **Build data and deploy GitHub Pages** → **Run workflow**.
+- Source: `Deploy from a branch`
+- Branch: `main`
+- Folder: `/ (root)`
+- Save
 
-Esto evita el error de cuota de Apps Script porque ya no se usa Apps Script ni UrlFetch.
+## Secrets requeridos
 
-## Setup
-
-1. Crea un repo nuevo en GitHub.
-2. Sube estos archivos.
-3. Ve a **Settings → Pages** y selecciona **GitHub Actions** como source.
-4. Ve a **Settings → Secrets and variables → Actions**.
-
-### Secrets requeridos
+Settings → Secrets and variables → Actions → Secrets:
 
 - `SHOPIFY_STORE` = `your-store.myshopify.com`
-- `SHOPIFY_TOKEN` = token Shopify Admin API con `read_orders`
+- `SHOPIFY_TOKEN` = token Admin API con `read_orders`
 
-### Variables opcionales
+## Variables opcionales
+
+Settings → Secrets and variables → Actions → Variables:
 
 - `SHOPIFY_API_VERSION` = `2024-01`
 - `ATLETIX_UNIT_COGS` = `89`
@@ -37,18 +32,17 @@ Esto evita el error de cuota de Apps Script porque ya no se usa Apps Script ni U
 - `ATLETIX_STOCK_RECEIVED_DATE` = `2025-12-26`
 - `ATLETIX_SKU` = `ATLETIX60`
 
-## Cómo refrescar datos
+## Cómo refrescar Shopify data
 
-- Automático: cada 2 días por cron.
-- Manual: GitHub → Actions → Build data and deploy GitHub Pages → Run workflow.
-- En la pantalla del reporte: Refresh solo recarga el JSON ya publicado.
+Actions → Build Shopify data → Run workflow.
 
-## Datos manuales incluidos
+También corre automáticamente cada 2 días.
 
-- Mirko Midili queda como fila manual editable en H1 2026:
-  - Qty: 4
-  - Shipping: 17.33
-  - Address/phone en Note
-- Sebastian Petroll / order 152336 se marca como Atletix Request con shipping 70.26 cuando aparece en Shopify.
+El workflow genera y guarda:
 
-Los cambios manuales hechos en la pantalla se guardan en el navegador con `localStorage` y salen en el CSV.
+- `data/report.json` para el sitio en root.
+- `public/data/report.json` como copia de compatibilidad.
+
+## Botón Refresh en el sitio
+
+El botón Refresh del sitio no llama Shopify directamente. Solo recarga el último `data/report.json` publicado. Esto mantiene seguro el token de Shopify.
