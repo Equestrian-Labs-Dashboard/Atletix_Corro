@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-11T09:44:26.981Z",
+  "generated_at": "2026-07-13T11:19:57.973Z",
   "report_name": "Atletix Horse Sales Report",
   "source": "GitHub Actions + Shopify Admin API",
   "config": {
@@ -41,6 +41,29 @@
     }
   ],
   "rows": [
+    {
+      "order_id": "153918",
+      "order_numeric_id": 6364540731450,
+      "order_date": "2026-07-12T11:23:17-04:00",
+      "customer": "Katha Gatto",
+      "customer_email": "kathagatto@gmail.com",
+      "product": "Atletix Horse",
+      "variant": "60 Doses",
+      "sku": "ATLETIX60",
+      "quantity": 1,
+      "gross": 169.99,
+      "discount": 0,
+      "net": 169.99,
+      "unit_cogs": 89,
+      "cogs": 89,
+      "type": "Commercial",
+      "reason": "Paid Atletix sale",
+      "category_source": "Paid Atletix sale",
+      "order_shipping_total": 0,
+      "manual_shipping": 0,
+      "note": "",
+      "is_manual": false
+    },
     {
       "order_id": "153843",
       "order_numeric_id": 6354950520890,
