@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-09T12:52:49.985Z",
+  "generated_at": "2026-09-11T12:45:08.921Z",
   "report_name": "Atletix Horse Sales Report",
   "source": "GitHub Actions + Shopify Admin API",
   "config": {
@@ -41,6 +41,29 @@
     }
   ],
   "rows": [
+    {
+      "order_id": "154612",
+      "order_numeric_id": 6450195038266,
+      "order_date": "2026-09-09T11:09:53-04:00",
+      "customer": "Ashlee Bond",
+      "customer_email": "ashleebond@mac.com",
+      "product": "Atletix Horse",
+      "variant": "60 Doses",
+      "sku": "ATLETIX60",
+      "quantity": 1,
+      "gross": 199.99,
+      "discount": 199.99,
+      "net": 0,
+      "unit_cogs": 89,
+      "cogs": 89,
+      "type": "Marketing / Seeded",
+      "reason": "100% discount/free unit",
+      "category_source": "100% discount/free unit",
+      "order_shipping_total": 0,
+      "manual_shipping": 0,
+      "note": "",
+      "is_manual": false
+    },
     {
       "order_id": "154499",
       "order_numeric_id": 6437531516986,
